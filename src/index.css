@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Bootstrap + Tailwind Integration */
+/* Custom responsive utilities for better mobile experience */
+
+/* Card hover effects for better UX */
+.card {
+  transition: all 0.3s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Responsive text sizes */
+@media (max-width: 576px) {
+  .h1, h1 { font-size: 1.75rem !important; }
+  .h2, h2 { font-size: 1.5rem !important; }
+  .h3, h3 { font-size: 1.25rem !important; }
+  .h4, h4 { font-size: 1.1rem !important; }
+  .h5, h5 { font-size: 1rem !important; }
+  .h6, h6 { font-size: 0.9rem !important; }
+}
+
+/* Better spacing on mobile */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .py-4 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+/* Improved button sizes for touch */
+@media (max-width: 768px) {
+  .btn-sm {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .btn {
+    min-height: 44px !important; /* iOS touch target minimum */
+  }
+}
+
+/* Better grid spacing on mobile */
+@media (max-width: 576px) {
+  .g-4 > * {
+    margin-bottom: 1rem !important;
+  }
+
+  .row.g-4 {
+    margin-left: -0.5rem !important;
+    margin-right: -0.5rem !important;
+  }
+
+  .row.g-4 > * {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* Ensure cards maintain good proportions */
+.card {
+  min-height: 180px;
+}
+
+@media (max-width: 576px) {
+  .card {
+    min-height: 160px;
+  }
+}
+
+/* Action buttons visibility on mobile and touch devices */
+@media (max-width: 768px) {
+  .action-buttons {
+    opacity: 1 !important; /* Always show on mobile */
+  }
+}
+
+/* For touch devices, always show action buttons */
+@media (hover: none) and (pointer: coarse) {
+  .action-buttons {
+    opacity: 1 !important;
+  }
+}
+
+/* Ensure buttons are properly sized and visible */
+.action-buttons .btn {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-buttons .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Add subtle hint for action buttons on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .action-buttons {
+    opacity: 1 !important;
+  }
+
+  /* Add a subtle indicator that buttons are available */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 5;
+  }
+
+  .card:hover::before {
+    opacity: 0; /* Hide when buttons are visible */
+  }
+
+  .card:not(:hover)::before {
+    opacity: 1; /* Show when buttons are hidden */
+  }
+}
+
+/* Better search input on mobile */
+@media (max-width: 576px) {
+  .form-control {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+}
+
+/* Smooth animations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn, .card, .form-control {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Edge browser compatibility fixes */
+@supports not (backdrop-filter: blur(10px)) {
+  .backdrop-blur-sm {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+  }
+}
+
+/* Ensure gradients work in older browsers */
+.gradient-fallback {
+  background: #3b82f6; /* Fallback color */
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* Fix for Edge opacity issues */
+.bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.bg-white\/90 {
+  background-color: rgba(255, 255, 255, 0.9);
+}
