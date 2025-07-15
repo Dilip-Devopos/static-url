@@ -21,7 +21,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
   const handleDelete = useCallback(() => onDelete(), [onDelete]);
   const handleClick = useCallback(() => onClick(), [onClick]);
   return (
-    <div className="card h-100 shadow border-0 position-relative"
+    <div className="card h-100 shadow border-0 position-relative mr-4 md:mr-16"
          style={{
            transition: 'all 0.3s ease',
            minHeight: '160px'
@@ -50,8 +50,8 @@ const LinkCard: React.FC<LinkCardProps> = ({
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="action-buttons d-flex" style={{opacity: 0.7, transition: 'opacity 0.2s'}}>
+          {/* Action Buttons - positioned to avoid navigation overlap */}
+          <div className="action-buttons d-flex position-relative" style={{opacity: 0.7, transition: 'opacity 0.2s', zIndex: 10, marginRight: '20px'}}>
             <button
               onClick={(e) => {
                 e.stopPropagation();

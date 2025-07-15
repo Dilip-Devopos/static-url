@@ -29,7 +29,7 @@ const FolderSection: React.FC<FolderSectionProps> = ({
   return (
     <div className="mb-8">
       {/* Folder Header */}
-      <div className="group flex items-center justify-between mb-4 p-4 bg-gray-50/80 backdrop-blur-sm rounded-xl border border-gray-200/50 hover:bg-gray-100/80 transition-colors">
+      <div className="group flex items-center justify-between mb-4 p-4 bg-gray-50/80 backdrop-blur-sm rounded-xl border border-gray-200/50 hover:bg-gray-100/80 transition-colors mr-4 md:mr-16">
         <button
           onClick={onToggle}
           className="flex items-center space-x-3 text-left flex-1 hover:text-blue-600 transition-colors"
@@ -50,7 +50,7 @@ const FolderSection: React.FC<FolderSectionProps> = ({
           </div>
         </button>
 
-        <div className="flex space-x-1 opacity-100 transition-opacity duration-200">
+        <div className="flex space-x-1 opacity-100 transition-opacity duration-200 relative z-10" style={{ marginRight: '8px' }}>
           <button
             onClick={(e) => {
               e.stopPropagation();

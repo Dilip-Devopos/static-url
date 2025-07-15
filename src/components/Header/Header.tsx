@@ -1,5 +1,7 @@
 import React from 'react';
-import { Search, ArrowLeft, Home, Trash2, Plus } from 'lucide-react';
+import { Search, ArrowLeft, Home, Trash2, Plus, FileText } from 'lucide-react';
+import { exportAllLinksToPDF } from '../../utils/pdfExport';
+import { Category } from '../../types';
 
 interface HeaderProps {
   selectedCategory: string | null;
@@ -9,6 +11,7 @@ interface HeaderProps {
   openUnifiedForm: (mode: 'link' | 'folder' | 'category') => void;
   onResetAllBookmarks: () => void;
   selectedCategoryData?: { name: string } | null;
+  categories: Category[];
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -18,8 +21,17 @@ const Header: React.FC<HeaderProps> = ({
   setSelectedCategory,
   openUnifiedForm,
   onResetAllBookmarks,
-  selectedCategoryData
+  selectedCategoryData,
+  categories
 }) => {
+  const handleExportToPDF = () => {
+    exportAllLinksToPDF(categories, {
+      includeDescriptions: true,
+      includeCategories: true,
+      includeFolders: true,
+      sortOrder: 'original'
+    });
+  };
   return (
     <header className="bg-white shadow-sm border-bottom">
       <div className="container-fluid">
@@ -97,6 +109,33 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <Plus className="w-3 h-3 me-1" />
                 <span>Add New</span>
+              </button>
+
+              <button
+                onClick={handleExportToPDF}
+                className="btn btn-success btn-sm me-2 d-flex align-items-center"
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                }}
+                title="Export all links to PDF"
+              >
+                <FileText className="w-3 h-3 me-1" />
+                <span>Export PDF</span>
               </button>
 
               <button

@@ -100,6 +100,7 @@ const App: React.FC = () => {
           openUnifiedForm={openUnifiedForm}
           onResetAllBookmarks={handleResetAllBookmarks}
           selectedCategoryData={selectedCategoryData}
+          categories={categories}
         />
 
         {/* Main Content */}
@@ -129,7 +130,51 @@ const App: React.FC = () => {
         )}
 
         {/* Floating Navigation Arrows */}
-        <div className="fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3 z-40">
+        <div className="fixed top-1/2 transform -translate-y-1/2 flex flex-col space-y-3 z-50 hidden md:flex" style={{ right: '16px' }}>
+          {selectedCategory ? (
+            <>
+              {/* Back to Categories */}
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl border border-gray-200 rounded-full p-3 transition-all duration-300 transform hover:scale-110"
+                title="Back to categories"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-600" />
+              </button>
+
+              {/* Next Category */}
+              {(() => {
+                const currentIndex = categories.findIndex(cat => cat.id === selectedCategory);
+                const nextIndex = (currentIndex + 1) % categories.length;
+                const nextCategory = categories[nextIndex];
+
+                return nextCategory && nextCategory.id !== selectedCategory ? (
+                  <button
+                    onClick={() => setSelectedCategory(nextCategory.id)}
+                    className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl border border-gray-200 rounded-full p-3 transition-all duration-300 transform hover:scale-110"
+                    title={`Next: ${nextCategory.name}`}
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-600" />
+                  </button>
+                ) : null;
+              })()}
+            </>
+          ) : (
+            /* When on main grid, show arrow to enter first category */
+            categories.length > 0 && (
+              <button
+                onClick={() => setSelectedCategory(categories[0].id)}
+                className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl border border-gray-200 rounded-full p-3 transition-all duration-300 transform hover:scale-110"
+                title={`Enter: ${categories[0].name}`}
+              >
+                <ChevronRight className="w-5 h-5 text-gray-600" />
+              </button>
+            )
+          )}
+        </div>
+
+        {/* Mobile Navigation - Bottom */}
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3 z-50 md:hidden">
           {selectedCategory ? (
             <>
               {/* Back to Categories */}

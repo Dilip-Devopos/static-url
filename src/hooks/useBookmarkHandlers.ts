@@ -1,5 +1,6 @@
 import { Category, BookmarkLink, Subdirectory, FormMode, FormData, CategoryFormData, SubdirectoryFormData, EditingLink } from '../types';
 import { generateId } from '../utils/helpers';
+import { flushSync } from 'react-dom';
 
 interface UseBookmarkHandlersProps {
   categories: Category[];
@@ -87,35 +88,19 @@ export const useBookmarkHandlers = ({
 
     if (!subdirectoryFormData.name || !subdirectoryFormData.categoryId) return;
 
-    if (formMode === 'edit-folder' && editingItem) {
-      // Update existing folder
-      setCategories(prev => prev.map(category => 
-        category.id === editingItem.categoryId
-          ? {
-              ...category,
-              subdirectories: category.subdirectories.map(subdir =>
-                subdir.id === editingItem.id
-                  ? { ...subdir, name: subdirectoryFormData.name }
-                  : subdir
-              )
-            }
-          : category
-      ));
-    } else {
-      // Add new folder
-      const newSubdirectory: Subdirectory = {
-        id: generateId(),
-        name: subdirectoryFormData.name,
-        links: [],
-        isExpanded: false
-      };
+    // Add new folder
+    const newSubdirectory: Subdirectory = {
+      id: generateId(),
+      name: subdirectoryFormData.name,
+      links: [],
+      isExpanded: false
+    };
 
-      setCategories(prev => prev.map(category => 
-        category.id === subdirectoryFormData.categoryId
-          ? { ...category, subdirectories: [...category.subdirectories, newSubdirectory] }
-          : category
-      ));
-    }
+    setCategories(prev => prev.map(category =>
+      category.id === subdirectoryFormData.categoryId
+        ? { ...category, subdirectories: [...category.subdirectories, newSubdirectory] }
+        : category
+    ));
 
     // Close form first, then reset data
     closeUnifiedForm();
@@ -330,7 +315,9 @@ export const useBookmarkHandlers = ({
   const handleUpdateFolder = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!editingItem || !subdirectoryFormData.name) return;
+    if (!editingItem || !subdirectoryFormData.name.trim()) {
+      return;
+    }
 
     const oldCategoryId = editingItem.categoryId;
     const newCategoryId = subdirectoryFormData.newCategoryId || oldCategoryId;
@@ -380,9 +367,18 @@ export const useBookmarkHandlers = ({
       return newCategories;
     });
 
-    setSubdirectoryFormData({ name: '', categoryId: selectedCategory || 'aws', newCategoryId: '' });
-    setEditingItem(null);
+    // Use flushSync to ensure state updates are applied immediately
+    flushSync(() => {
+      setSubdirectoryFormData({ name: '', categoryId: editingItem.categoryId || 'aws', newCategoryId: '' });
+      setEditingItem(null);
+    });
+
+    // Close the modal immediately
     closeUnifiedForm();
+
+    // Backup closure attempts to ensure modal closes
+    setTimeout(() => closeUnifiedForm(), 100);
+    setTimeout(() => closeUnifiedForm(), 300);
   };
 
   const handleAddLinkToFolder = (categoryId: string, subdirectoryId?: string) => {

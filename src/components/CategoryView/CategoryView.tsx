@@ -1,5 +1,7 @@
 import React from 'react';
+import { FileText } from 'lucide-react';
 import { Category, Subdirectory } from '../../types';
+import { exportCategoryToPDF } from '../../utils/pdfExport';
 import LinkCard from '../LinkCard/LinkCard';
 import FolderSection from '../FolderSection/FolderSection';
 
@@ -47,14 +49,47 @@ const CategoryView: React.FC<CategoryViewProps> = ({
       subdir.links.length > 0
     );
 
+  const handleExportCategoryToPDF = () => {
+    exportCategoryToPDF(category, {
+      includeDescriptions: true,
+      includeCategories: false,
+      includeFolders: true,
+      sortOrder: 'original'
+    });
+  };
+
   return (
     <div className="container-fluid py-4">
       <div className="row">
         <div className="col-12">
+          {/* Category Header with Export Button */}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h1 className="h2 fw-bold text-dark mb-1">{category.name}</h1>
+              <p className="text-muted mb-0">
+                {filteredMainLinks.length + filteredSubdirectories.reduce((acc, sub) => acc + sub.links.length, 0)} resources
+              </p>
+            </div>
+            <button
+              onClick={handleExportCategoryToPDF}
+              className="btn btn-outline-success btn-sm d-flex align-items-center"
+              style={{
+                borderRadius: '0.5rem',
+                padding: '0.5rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+              title={`Export ${category.name} to PDF`}
+            >
+              <FileText className="w-3 h-3 me-1" />
+              <span>Export Category</span>
+            </button>
+          </div>
           {/* Main Category Links */}
           {filteredMainLinks.length > 0 && (
             <div className="mb-5">
-              <h2 className="h3 fw-bold text-dark mb-4">Main Resources</h2>
+              <h2 className="h4 fw-semibold text-dark mb-4">Main Resources</h2>
               <div className="row g-4">
                 {filteredMainLinks.map(link => (
                   <div key={link.id} className="col-12 col-md-6 col-lg-4">
@@ -73,7 +108,7 @@ const CategoryView: React.FC<CategoryViewProps> = ({
       {/* Subdirectories */}
       {filteredSubdirectories.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Folders</h2>
+          <h2 className="h4 fw-semibold text-dark mb-4">Folders</h2>
           {filteredSubdirectories.map(subdirectory => (
             <FolderSection
               key={subdirectory.id}
